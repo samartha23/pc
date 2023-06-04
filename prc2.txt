@@ -1,0 +1,51 @@
+#include<stdio.h>
+#include<sys/types.h>
+#include<unistd.h>
+#include<stdlib.h>
+
+void bubble_sort(int arr[], int n) {
+    int i, j, temp;
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+
+void fork_example() {
+    int arr[25], n, i;
+    printf("Enter the number of values in the array: ");
+    scanf("%d", &n);
+    printf("Enter the array elements: ");
+    for (i = 0; i < n; i++)
+        scanf("%d", &arr[i]);
+
+    int pid = fork();
+    if (pid == 0) {
+        sleep(10);
+        printf("\nChild process\n");
+        printf("Child process id = %d\n", getpid());
+        bubble_sort(arr, n);
+        printf("\nElements sorted using Bubble Sort:\n");
+        for (i = 0; i < n; i++)
+            printf("%d ", arr[i]);
+        printf("\nParent process id = %d\n", getppid());
+        system("ps -x");
+    } else {
+        printf("\nParent process\n");
+        printf("Parent process id = %d\n", getpid());
+        printf("\nElements sorted using Insertion Sort:\n");
+        for (i = 0; i < n; i++)
+            printf("%d ", arr[i]);
+        printf("\n");
+    }
+}
+
+int main() {
+    fork_example();
+    return 0;
+}
